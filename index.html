@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Payment Success</title>
+  <title>Payment Status</title>
   <style>
     body {
       margin: 0;
@@ -31,7 +31,6 @@
       height: 60px;
       margin: 0 auto 20px;
       border-radius: 50%;
-      background: #dcfce7;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -39,7 +38,6 @@
     .icon svg {
       width: 32px;
       height: 32px;
-      stroke: #16a34a; /* green-600 */
     }
     h1 {
       font-size: 24px;
@@ -53,14 +51,40 @@
 </head>
 <body>
   <div class="card">
-    <div class="icon">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l2 2 4-4"></path>
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"></path>
-      </svg>
-    </div>
-    <h1>Payment Successful</h1>
-    <p>Thank you! Your payment has been completed successfully.</p>
+    <div id="icon" class="icon"></div>
+    <h1 id="title"></h1>
+    <p id="message"></p>
   </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get("status");
+
+    const icon = document.getElementById("icon");
+    const title = document.getElementById("title");
+    const message = document.getElementById("message");
+
+    if (status === "success") {
+      icon.style.background = "#dcfce7";
+      icon.innerHTML = `
+        <svg fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l2 2 4-4"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"></path>
+        </svg>`;
+      title.textContent = "Payment Successful";
+      message.textContent = "Thank you! Your payment has been completed successfully.";
+    } else if (status === "error") {
+      icon.style.background = "#fee2e2";
+      icon.innerHTML = `
+        <svg fill="none" stroke="#dc2626" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>`;
+      title.textContent = "Payment Error";
+      message.textContent = "Payment failed. Please try again.";
+    } else {
+      title.textContent = "Payment Status";
+      message.textContent = "Unknown status.";
+    }
+  </script>
 </body>
 </html>
